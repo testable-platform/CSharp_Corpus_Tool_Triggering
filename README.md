@@ -100,28 +100,16 @@ test framework can be restored.
 
 ## Tool data folders
 
-Four folders carry the per-tool data, the same four every language corpus in
-this programme uses. Their contents are byte-identical on every branch of this
-repository.
+This repo carries only `Tool Triggering (Synthetic Data)` from testable-platform/csharp-corpus's original per-branch task-data folders.
 
 | Folder | What it holds |
 |---|---|
 | `Tool Triggering (Synthetic Data)` | 19 folders of planted data, one per runner, written to trigger its tool at this family's language version. Each folder's `DATA.md` says what is planted and what a correct run should measure. |
-| `Tool Clean (Synthetic Data)` | The 17 roster tools, with code a tool should find **nothing** in. The false-positive control. |
-| `Tool Invalid (Synthetic Data)` | The same 17 tools, with code a tool **should** flag. The true-positive control. |
-| `Tool Triggering (Tool Github Test data)` | Each tool's own upstream test suite, copied byte-for-byte from the tool's repository. `SOURCE.md` records the repo, commit and licence. |
 
-Clean and Invalid carry five version folders per tool -- `netfx45`, `netfx46`,
-`netcoreapp30`, `net9`, `net10`. Each compiles at its own C# level, and its
-`LanguageMarker` is rejected one level below, so the version a folder claims is
-verified by execution rather than asserted.
-
-**Clean, Invalid and Tool Triggering (Synthetic Data) contain no project
+**This repo's own folder contains no project
 manifest** -- no `.csproj`, `.sln`, `packages.config` or lockfile. One there
 would make the platform treat the folder as a project of its own and run the
-whole roster against it. `Tool Triggering (Tool Github Test data)` is the
-deliberate exception: it is upstream code kept exactly as upstream ships it,
-manifests included.
+whole roster against it.
 
 ## Tool entry points
 
@@ -140,33 +128,3 @@ Every runner's expected exit code is recorded there, and
 `tool_integration.py --run` exits **2** if any tool produces a result the dataset
 does not already record - a new finding, as distinct from a measurement.
 
-<!-- tools-non-triggering -->
-## Tools non triggering (Synthetic Data)
-
-A fifth per-branch data folder, beside `Tool Clean (Synthetic Data)`,
-`Tool Invalid (Synthetic Data)`, `Tool Triggering (Synthetic Data)` and
-`Tool Triggering (Tool Github Test data)`.
-
-Clean makes each tool run and report nothing wrong. Invalid makes it run and
-report something. This folder holds data with nothing in it for any tool to
-catch -- and, where no program would reach the tool at all, nothing for it to
-start on. It is the negative control that tells *correctly detected nothing*
-apart from *the scan never ran*.
-
-`Tools non triggering (Synthetic Data)/` holds 17 tool-named folders, matching the names in Clean
-and Invalid so the data sets line up name-for-name:
-
-* **8 tools read source**, so they get a minimal program per boundary
-  family (netfx45, netfx46, netcoreapp30, net9, net10) -- one class or one function, no branching, no
-  duplication, no dependency, no dead export, no magic number.
-* **9 tools cannot be answered by a program** -- they read a lockfile,
-  a coverage report, compiled bytecode or the commit history -- so they carry
-  the subject matter as a plain record instead, with the reason stated in that
-  folder's own README.
-
-**No manifest, no lockfile, no tool configuration, no runner and no
-`trigger.yaml` anywhere in it**, so the folder adds no discovered project and
-no task to a run.
-
-See `Tools non triggering (Synthetic Data)/README.md` for the per-tool table, the mechanism each tool is
-inert by, and what was measured.
